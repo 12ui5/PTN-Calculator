@@ -155,7 +155,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <h3 @click="getCharaMats">Character Level Up material</h3>
+                    <h3>Character Level Up material</h3>
                     <div class="row">
                         <div class="col align-self-start">
                             <img :src="" style="max-width:100%;">
@@ -176,7 +176,6 @@
         var app = Vue.createApp({
 			data() {
 			    return {
-                    sinImg: "",
                     sinner: "",
                     // Fury, Arcane, Umbra, Reticle, Endura, Catalyst
                     isActive: 0,
@@ -781,6 +780,13 @@
                     }
 			    };
 			},
+            watch: {
+                sinner() {
+                    console.log("change")
+                    this.getCharaMats();
+                    this.getSkillMats();
+                },
+            },
 			methods: {
                 // displaySinner(sin) {
                 //     console.log(sin)
@@ -792,16 +798,21 @@
                     if (this.selectedLevels[0] > this.selectedLevels[1]) {
                         this.selectedLevels[1] = this.selectedLevels[0];
                     }
+                    console.log("change")
+                    this.getCharaMats();
+                    this.getSkillMats();
                 }, 
                 skillLevel(lvl, type) {
                     this.selectedSkills[type][0] = lvl;
                     if (this.selectedSkills[type][0] > this.selectedSkills[type][1]) {
                         this.selectedSkills[type][1] = this.selectedSkills[type][0];
                     }
+                    console.log("change")
+                    this.getCharaMats();
+                    this.getSkillMats();
                 }, 
                 getCharaMats() {
                     this.charaMats = [];
-                    this.skillMats = [];
 
                     var [start, end] = [
                         isNaN(this.selectedLevels[0]) ? Number(this.selectedLevels[0].substring(0, 2))+0.5 : this.selectedLevels[0], 
@@ -862,7 +873,48 @@
                     this.charaMats.push({name: "DisCoin", quantity: coin, ...this.materials["DisCoin"]})
                     this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
                     console.log(this.charaMats)
-                }
+                },
+                getSkillMats() {
+                    this.skillMats = [];
+                    
+                    mats = {}
+                    coins = 0;
+                    relics = 0;
+                    for (let i = 0; i < this.selectedSkills.length; i++) {
+                        lvls = this.skills[this.sinner.rank].slice(this.selectedSkills[i][0]-1, this.selectedSkills[i][1]-1);
+                        console.log(lvls);
+
+                        for (lvl of lvls) {
+                            coins += lvl[3];
+                            relics += lvl[4];
+
+                            if (lvl[0] in mats) {
+                                mats[lvl[0]] = mats[lvl[0]].map((num, index) => num + lvl[index+1]);
+                            } else {
+                                mats[lvl[0]] = lvl.slice(1)
+                            }
+                        }
+                    }
+                    console.log(mats);
+                    console.log(coins);
+                    console.log(relics);
+                    
+                    skills = this.sinners[this.sinner.name]["skills"];
+                    if (coins > 0) {
+                        this.skillMats.push({name: "DisCoin", quantity: coins, ...this.materials["DisCoin"]});
+                    }
+                    if (relics > 0) {
+                        this.skillMats.push({name: skills[4], quantity: relics, ...this.materials[skills[4]]});
+                    }
+
+                    for (rarity in mats) {
+                        moduleMap = {0: "Skill Module I", 1: "Skill Module II", 2: "Skill Module III", 3: "Skill Module IV"};
+                        this.skillMats.push({name: moduleMap[rarity], quantity: mats[rarity][0], ...this.materials[moduleMap[rarity]]});
+                        this.skillMats.push({name: skills[rarity], quantity: mats[rarity][1], ...this.materials[skills[rarity]]});
+                    }
+
+                    console.log(this.skillMats);
+                },
 			},
 	    });
         var vm = app.mount("#app");
