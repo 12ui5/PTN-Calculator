@@ -154,6 +154,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <h3 @click="getCharaMats">Character Level Up material</h3>
+                    <div class="row">
+                        <div class="col align-self-start">
+                            <img :src="" style="max-width:100%;">
+                        </div>
+                        <div class="col align-self-start">
+                            f
+                        </div>
+                        <div class="col align-self-end">
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -171,6 +185,9 @@
                     levels: Array.from({ length: 20 }, (_, index) => index + 1).concat(["20 Advanced"], Array.from({ length: 20 }, (_, index) => index + 21), ["40 Advanced"], Array.from({ length: 30 }, (_, index) => index + 41), ["70 Advanced"], Array.from({ length: 20 }, (_, index) => index + 71)),
                     skillLevels: Array.from({ length: 10 }, (_, index) => index + 1),
                     selectedSkills: [[1, 10], [1, 10], [1, 10], [1, 10]],
+                    
+                    charaMats: [],
+                    skillMats: [],
 
                     levelEssence: {
                         "S": [
@@ -782,6 +799,70 @@
                         this.selectedSkills[type][1] = this.selectedSkills[type][0];
                     }
                 }, 
+                getCharaMats() {
+                    this.charaMats = [];
+                    this.skillMats = [];
+
+                    var [start, end] = [
+                        isNaN(this.selectedLevels[0]) ? Number(this.selectedLevels[0].substring(0, 2))+0.5 : this.selectedLevels[0], 
+                        isNaN(this.selectedLevels[1]) ? Number(this.selectedLevels[1].substring(0, 2))+0.5 : this.selectedLevels[1]
+                    ];
+                    var lvl = Math.floor(start-1);
+                    var essence = 0;
+                    console.log(start, end)
+                    while (lvl <= Math.floor(end-2)) {
+                        essence += this.levelEssence[this.sinner.rank][lvl];
+                        lvl += 1;
+                    }
+                    console.log(essence)
+
+                    var lvl = Math.floor(start-1)
+                    var coin = 0;
+                    console.log(start, end)
+                    while (lvl <= end-2) {
+                        coin += this.levelDis[this.sinner.rank][lvl];
+                        lvl += 1;
+                    }
+                    console.log(coin)
+
+                    //P1
+                    if (start <= 20.5 && end >= 20.5 && start != end) {
+                        console.log("P1");
+                        coin += this.ascQty[this.sinner.rank]["P1"][3];
+                        var i = 0;
+                        for (mat of this.sinners[this.sinner.name]["p1"]) {
+                            this.charaMats.push({name: mat, quantity: this.ascQty[this.sinner.rank]["P1"][i],...this.materials[mat]})
+                            i += 1;
+                        }
+                    }
+
+                    //P2
+                    if (start <= 40.5 && end >= 40.5 && start != end) {
+                        console.log("P2");
+                        coin += this.ascQty[this.sinner.rank]["P2"][3];
+                        var j = 0;
+                        for (mat of this.sinners[this.sinner.name]["p2"]) {
+                            this.charaMats.push({name: mat, quantity: this.ascQty[this.sinner.rank]["P2"][j],...this.materials[mat]})
+                            j += 1;
+                        }
+                    }
+
+                    //P3
+                    if (start <= 70.5 && end >= 70.5 && start != end) {
+                        console.log("P3");
+                        coin += this.ascQty[this.sinner.rank]["P3"][3];
+                        var k = 0;
+                        for (mat of this.sinners[this.sinner.name]["p3"]) {
+                            this.charaMats.push({name: mat, quantity: this.ascQty[this.sinner.rank]["P3"][k],...this.materials[mat]})
+                            k += 1;
+                        }
+                    }
+                    console.log(essence, coin)
+
+                    this.charaMats.push({name: "DisCoin", quantity: coin, ...this.materials["DisCoin"]})
+                    this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
+                    console.log(this.charaMats)
+                }
 			},
 	    });
         var vm = app.mount("#app");
