@@ -51,7 +51,7 @@
                               {{selectedLevels[1]}}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-scrollable">
-                              <li v-for="level in levels.slice(levels.indexOf(selectedLevels[0]))"><a class="dropdown-item" @click="selectedLevels[1] = level">{{level}}</a></li>
+                              <li v-for="level in levels.slice(levels.indexOf(selectedLevels[0]))"><a class="dropdown-item" @click="targetCL(level)">{{level}}</a></li>
                             </ul>
                         </span>
                     </div>                   
@@ -76,7 +76,7 @@
                                   {{selectedSkills[0][1]}}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-scrollable">
-                                  <li v-for="level in skillLevels.slice(selectedSkills[0][0]-1)"><a class="dropdown-item" @click="selectedSkills[0][1] = level">{{level}}</a></li>
+                                  <li v-for="level in skillLevels.slice(selectedSkills[0][0]-1)"><a class="dropdown-item" @click="targetSL(0, level)">{{level}}</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -100,7 +100,7 @@
                                   {{selectedSkills[1][1]}}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-scrollable">
-                                  <li v-for="level in skillLevels.slice(selectedSkills[1][0]-1)"><a class="dropdown-item" @click="selectedSkills[1][1] = level">{{level}}</a></li>
+                                  <li v-for="level in skillLevels.slice(selectedSkills[1][0]-1)"><a class="dropdown-item" @click="targetSL(1, level)">{{level}}</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -124,7 +124,7 @@
                                   {{selectedSkills[2][1]}}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-scrollable">
-                                  <li v-for="level in skillLevels.slice(selectedSkills[2][0]-1)"><a class="dropdown-item" @click="selectedSkills[2][1] = level">{{level}}</a></li>
+                                  <li v-for="level in skillLevels.slice(selectedSkills[2][0]-1)"><a class="dropdown-item" @click="targetSL(2, level)">{{level}}</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -148,7 +148,7 @@
                                   {{selectedSkills[3][1]}}
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-scrollable">
-                                  <li v-for="level in skillLevels.slice(selectedSkills[3][0]-1)"><a class="dropdown-item" @click="selectedSkills[3][1] = level">{{level}}</a></li>
+                                  <li v-for="level in skillLevels.slice(selectedSkills[3][0]-1)"><a class="dropdown-item" @click="targetSL(3, level)">{{level}}</a></li>
                                 </ul>
                             </span>
                         </div>
@@ -818,17 +818,23 @@
                     }
                     console.log("change")
                     this.getCharaMats();
-                    this.getSkillMats();
-                }, 
+                },
+                targetCL(lvl){
+                    this.selectedLevels[1] = lvl;
+                    this.getCharaMats();
+                },
                 skillLevel(lvl, type) {
                     this.selectedSkills[type][0] = lvl;
                     if (this.selectedSkills[type][0] > this.selectedSkills[type][1]) {
                         this.selectedSkills[type][1] = this.selectedSkills[type][0];
                     }
                     console.log("change")
-                    this.getCharaMats();
                     this.getSkillMats();
                 }, 
+                targetSL(no, lvl){
+                    this.selectedSkills[no][1] = lvl
+                    this.getSkillMats();
+                },
                 getCharaMats() {
                     this.charaMats = [];
 
