@@ -158,7 +158,9 @@
                     <h3>Character Level Up material</h3>
                     <div class="row" v-for="ch in charaMats">
                         <div class="col align-self-start">
-                            <img :src="ch.image" style="max-width:100%;">
+                            <a :href="ch.notion" target="_blank">
+                                <img :src="ch.image" style="max-width:100%;">
+                            </a>
                         </div>
                         <div class="col align-self-start">
                             {{ch.name}}
@@ -172,7 +174,9 @@
                     <h3>Skill Level Up material</h3>
                     <div class="row" v-for="sk in skillMats">
                         <div class="col align-self-start">
-                            <img :src="sk.image" style="max-width:100%;">
+                            <a :href="sk.notion" target="_blank">
+                                <img :src="sk.image" style="max-width:100%;">
+                            </a>
                         </div>
                         <div class="col align-self-start">
                             {{sk.name}}
