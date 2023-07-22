@@ -4,15 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/vue@next"></script>
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Enhancement Calculator</title>
+    <style>
+        .dropdown-menu-scrollable {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
-        <img :src="sinImg" style="max-width:100vw;" v-if="sinImg">
-        <br/>
-        <select v-model="sinner" @change="displaySinner">
-            <option v-for="(v, k) in sinners">{{k}}</option>
-        </select>
+        <div class="row">
+            <div class="col-6">
+                <h2>Role</h2>
+                <p>
+                    <button v-for="(role, idx) in roles" type="button" class="btn btn-dark rounded-pill" :class="{'active': isActive == idx}" @click="isActive = idx">{{role}}</button>
+                </p>
+                <div class="row">
+                    <template v-for="(sin, name) in sinners">
+                        <div class="col-3" v-if="sin.role == roles[isActive]">
+                            <img :src="sin.image" style="max-width:100%" @click="sinner = {'name': name, ...sin}">
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="col" v-if="sinner">
+                <div class="row align-items-center">
+                    <div class="col-4">
+                        <img :src="sinner.image" style="max-width:100%;"> 
+                    </div>
+                    <div class="col">
+                        <h3>{{sinner.name}}</h3>
+                        <p class="text-muted">Select Level</p>
+                        <span class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{selectedLevels[0]}}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-scrollable">
+                              <li v-for="level in levels"><a class="dropdown-item" @click="charaLevel(level)">{{level}}</a></li>
+                            </ul>
+                        </span>
+                        <span class="px-3">-</span> 
+                        <span class="dropdown">
+                            <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              {{selectedLevels[1]}}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-scrollable">
+                              <li v-for="level in levels.slice(levels.indexOf(selectedLevels[0]))"><a class="dropdown-item" @click="selectedLevels[1] = level">{{level}}</a></li>
+                            </ul>
+                        </span>
+                    </div>                   
+                </div>
+                <div class="row">
+                    <div class="row align-items-center">
+                        <div class="col align-self-start">
+                            Normal Attack 
+                        </div>
+                        <div class="col align-self-end">
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[0][0]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels"><a class="dropdown-item" @click="skillLevel(level, 0)">{{level}}</a></li>
+                                </ul>
+                            </span>
+                            <span class="px-3">-</span> 
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[0][1]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels.slice(selectedSkills[0][0]-1)"><a class="dropdown-item" @click="selectedSkills[0][1] = level">{{level}}</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col align-self-start">
+                            Ultimate
+                        </div>
+                        <div class="col align-self-end">
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[1][0]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels"><a class="dropdown-item" @click="skillLevel(level, 1)">{{level}}</a></li>
+                                </ul>
+                            </span>
+                            <span class="px-3">-</span> 
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[1][1]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels.slice(selectedSkills[1][0]-1)"><a class="dropdown-item" @click="selectedSkills[1][1] = level">{{level}}</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col align-self-start">
+                            Passive 1
+                        </div>
+                        <div class="col align-self-end">
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[2][0]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels"><a class="dropdown-item" @click="skillLevel(level, 2)">{{level}}</a></li>
+                                </ul>
+                            </span>
+                            <span class="px-3">-</span> 
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[2][1]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels.slice(selectedSkills[2][0]-1)"><a class="dropdown-item" @click="selectedSkills[2][1] = level">{{level}}</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col align-self-start">
+                            Passive 2
+                        </div>
+                        <div class="col align-self-end">
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[3][0]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels"><a class="dropdown-item" @click="skillLevel(level, 3)">{{level}}</a></li>
+                                </ul>
+                            </span>
+                            <span class="px-3">-</span> 
+                            <span class="dropdown">
+                                <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  {{selectedSkills[3][1]}}
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-scrollable">
+                                  <li v-for="level in skillLevels.slice(selectedSkills[3][0]-1)"><a class="dropdown-item" @click="selectedSkills[3][1] = level">{{level}}</a></li>
+                                </ul>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -21,7 +164,14 @@
 			    return {
                     sinImg: "",
                     sinner: "",
-                    
+                    // Fury, Arcane, Umbra, Reticle, Endura, Catalyst
+                    isActive: 0,
+                    roles: ["Fury", "Arcane", "Umbra", "Reticle", "Endura", "Catalyst"],
+                    selectedLevels: [1, 90],
+                    levels: Array.from({ length: 20 }, (_, index) => index + 1).concat(["20 Advanced"], Array.from({ length: 20 }, (_, index) => index + 21), ["40 Advanced"], Array.from({ length: 30 }, (_, index) => index + 41), ["70 Advanced"], Array.from({ length: 20 }, (_, index) => index + 71)),
+                    skillLevels: Array.from({ length: 10 }, (_, index) => index + 1),
+                    selectedSkills: [[1, 10], [1, 10], [1, 10], [1, 10]],
+
                     levelEssence: {
                         "S": [
                             //1-10, 11-20 etc...
@@ -563,30 +713,79 @@
 					sinners: {
                         "Adela": {
                             rank: "S",
+                            role: "Umbra",
                             p1: ["Phase 1 Umbra Elemental Particle", "Organic Cyst", "Twilight Stone Concentrate"],
                             p2: ["Phase 2 Umbra Elemental Fluid", "Infected Cyst", "Twilight Crystal"],
                             p3: ["Phase 3 Umbra Elemental Substance", "Mutated Red Cyst", "Decaying Twilight Crystal"],
                             skills: ["Tear Stone Raw Ore", "Tear Stone Concentrate", "Tear Crystal", "Misty Tear Crystal", "DisSea Ravings"],
-                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F78c5763a-54be-4541-9180-37c5eb1b966c%2Fa.png?table=block&id=3398ff90-c242-4982-9bc2-7aa9c49f6964&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2"
+                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F78c5763a-54be-4541-9180-37c5eb1b966c%2Fa.png?table=block&id=3398ff90-c242-4982-9bc2-7aa9c49f6964&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://www.notion.so/rui5/Adela-3398ff90c24249829bc27aa9c49f6964",
                         }, 
                         "Bai Yi": {
                             rank: "S",
+                            role: "Umbra",
                             p1: ["Phase 1 Umbra Elemental Particle", "Arsenopyrite Concentrate", "Organic Elytra"],
                             p2: ["Phase 2 Umbra Elemental Fluid", "Arsenopyrite Crystal", "Infected Elytra"],
                             p3: ["Phase 3 Umbra Elemental Substance", "Frosted Arsenopyrite Crystal", "Mutated Ghastly Shadow Elytra"],
                             skills: ["Tear Stone Raw Ore", "Tear Stone Concentrate", "Tear Crystal", "Misty Tear Crystal", "DisSea Furor"],
                             image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F1a68339e-5b9b-4283-a1dd-0681fe23446f%2Fq.png?table=block&id=60c67037-44ef-4917-a4d4-239aa8987c24&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://www.notion.so/Bai-Yi-60c6703744ef4917a4d4239aa8987c24",
                         }, 
+                        "Crache": {
+                            rank: "S",
+                            role: "Umbra",
+                            p1: ["Phase 1 Umbra Elemental Particle", "Bronze Concentrate", "Organic Gel"],
+                            p2: ["Phase 2 Umbra Elemental Fluid", "Bronze Crystal", "Infected Gel"],
+                            p3: ["Phase 3 Umbra Elemental Substance", "Radiant Bronze Crystal", "Mutated Dark Gel"],
+                            skills: ["Arsenopyrite Raw Ore", "Arsenopyrite Concentrate", "Arsenopyrite Crystal", "Frosted Arsenopyrite Crystal", "DisSea Ravings"],
+                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8593f549-8521-496f-a327-7469a834db7f%2Fq.png?table=block&id=a39d20c0-3cb2-4eb2-b2f4-fbf99a1ee02d&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://rui5.notion.site/Crache-a39d20c03cb24eb2b2f4fbf99a1ee02d",
+                        }, 
+                        "Serpent": {
+                            rank: "S",
+                            role: "Umbra",
+                            p1: ["Phase 1 Umbra Elemental Particle", "Organic Horn", "Red Stone Concentrate"],
+                            p2: ["Phase 2 Umbra Elemental Fluid", "Infected Horn", "Red Crystal"],
+                            p3: ["Phase 3 Umbra Elemental Substance", "Mutated Spinous Horn", "Blood Red Crystal"],
+                            skills: ["Twilight Stone Raw Ore", "Twilight Stone Concentrate", "Twilight Crystal", "Decaying Twilight Crystal", "DisSea Corpses"],
+                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F65055a82-5409-44ee-a81a-b8813788fd7e%2Fq.png?table=block&id=abebc4c6-66af-41bc-aa47-7401b3a995da&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://rui5.notion.site/Serpent-abebc4c666af41bcaa477401b3a995da",
+                        }, 
+                        "Iron": {
+                            rank: "A",
+                            role: "Umbra",
+                            p1: ["Phase 1 Umbra Elemental Particle", "Organic Gel", "Arsenopyrite Raw Ore"],
+                            p2: ["Phase 2 Umbra Elemental Fluid", "Infected Gel", "Arsenopyrite Concentrate"],
+                            p3: ["Phase 3 Umbra Elemental Substance", "Mutated Dark Gel", "Arsenopyrite Crystal"],
+                            skills: ["Shriveled Tentacle", "Organic Tentacle", "Infected Tentacle", "Mutated Monstrous Tentacle", "DisSea Ravings"],
+                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F63f4f446-6e25-4175-bbaf-3763ee6c830b%2Fq.png?table=block&id=b6e326e0-1d91-4989-bfd1-35088a20d2b3&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://rui5.notion.site/Iron-b6e326e01d914989bfd135088a20d2b3",
+                        },
                     }
 			    };
 			},
 			methods: {
-                displaySinner() {
-                    this.sinImg = this.sinners[this.sinner]["image"];
-                }
+                // displaySinner(sin) {
+                //     console.log(sin)
+                //     this.sinner = sin
+                //     this.sinImg = this.sinner.image;
+                // }
+                charaLevel(lvl) {
+                    this.selectedLevels[0] = lvl;
+                    if (this.selectedLevels[0] > this.selectedLevels[1]) {
+                        this.selectedLevels[1] = this.selectedLevels[0];
+                    }
+                }, 
+                skillLevel(lvl, type) {
+                    this.selectedSkills[type][0] = lvl;
+                    if (this.selectedSkills[type][0] > this.selectedSkills[type][1]) {
+                        this.selectedSkills[type][1] = this.selectedSkills[type][0];
+                    }
+                }, 
 			},
 	    });
         var vm = app.mount("#app");
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
 </html>
