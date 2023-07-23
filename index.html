@@ -94,7 +94,7 @@
                                 <h4 class="modal-title fs-5" id="charaSelectLabel">Role</h4>
                             </div>
                             <div class="col pe-0 text-end">
-                                <button type="button" class="btn-close float-right" style="background-color:silver;" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-close-white float-right" style="color: silver !important;" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                         </div>
                         <p class="py-3">
@@ -995,7 +995,7 @@
 			},
             watch: {
                 sinner() {
-                    console.log("change")
+                    // console.log("change")
                     this.getCharaMats();
                     this.getSkillMats();
                 },
@@ -1016,7 +1016,7 @@
                     if (this.selectedLevels[0] > this.selectedLevels[1]) {
                         this.selectedLevels[1] = this.selectedLevels[0];
                     }
-                    console.log("change")
+                    // console.log("change")
                     this.getCharaMats();
                 },
                 targetCL(lvl){
@@ -1028,7 +1028,7 @@
                     if (this.selectedSkills[type][0] > this.selectedSkills[type][1]) {
                         this.selectedSkills[type][1] = this.selectedSkills[type][0];
                     }
-                    console.log("change")
+                    // console.log("change")
                     this.getSkillMats();
                 }, 
                 targetSL(no, lvl){
@@ -1044,25 +1044,25 @@
                     ];
                     var lvl = Math.floor(start-1);
                     var essence = 0;
-                    console.log(start, end)
+                    // console.log(start, end)
                     while (lvl <= Math.floor(end-2)) {
                         essence += this.levelEssence[this.sinner.rank][lvl];
                         lvl += 1;
                     }
-                    console.log(essence)
+                    // console.log(essence)
 
                     var lvl = Math.floor(start-1)
                     var coin = 0;
-                    console.log(start, end)
+                    // console.log(start, end)
                     while (lvl <= end-2) {
                         coin += this.levelDis[this.sinner.rank][lvl];
                         lvl += 1;
                     }
-                    console.log(coin)
+                    // console.log(coin)
 
                     //P1
                     if (start <= 20.5 && end >= 20.5 && start != end) {
-                        console.log("P1");
+                        // console.log("P1");
                         coin += this.ascQty[this.sinner.rank]["P1"][3];
                         var i = 0;
                         for (mat of this.sinners[this.sinner.name]["p1"]) {
@@ -1073,7 +1073,7 @@
 
                     //P2
                     if (start <= 40.5 && end >= 40.5 && start != end) {
-                        console.log("P2");
+                        // console.log("P2");
                         coin += this.ascQty[this.sinner.rank]["P2"][3];
                         var j = 0;
                         for (mat of this.sinners[this.sinner.name]["p2"]) {
@@ -1084,7 +1084,7 @@
 
                     //P3
                     if (start <= 70.5 && end >= 70.5 && start != end) {
-                        console.log("P3");
+                        // console.log("P3");
                         coin += this.ascQty[this.sinner.rank]["P3"][3];
                         var k = 0;
                         for (mat of this.sinners[this.sinner.name]["p3"]) {
@@ -1092,13 +1092,13 @@
                             k += 1;
                         }
                     }
-                    console.log(essence, coin)
+                    // console.log(essence, coin)
 
                     this.charaMats.push({name: "DisCoin", quantity: coin, ...this.materials["DisCoin"]})
                     this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
 
                     this.charaMats.sort(this.compareByGroup);
-                    console.log(this.charaMats)
+                    // console.log(this.charaMats)
                     this.getTotalMats();
                 },
                 getSkillMats() {
@@ -1109,7 +1109,7 @@
                     relics = 0;
                     for (let i = 0; i < this.selectedSkills.length; i++) {
                         lvls = this.skills[this.sinner.rank].slice(this.selectedSkills[i][0]-1, this.selectedSkills[i][1]-1);
-                        console.log(lvls);
+                        // console.log(lvls);
 
                         for (lvl of lvls) {
                             coins += lvl[3];
@@ -1122,9 +1122,9 @@
                             }
                         }
                     }
-                    console.log(mats);
-                    console.log(coins);
-                    console.log(relics);
+                    // console.log(mats);
+                    // console.log(coins);
+                    // console.log(relics);
                     
                     skills = this.sinners[this.sinner.name]["skills"];
                     if (coins > 0) {
@@ -1141,24 +1141,20 @@
                     }
 
                     this.skillMats.sort(this.compareByGroup);
-                    console.log(this.skillMats);
+                    // console.log(this.skillMats);
                     this.getTotalMats();
                 },
                 getTotalMats() {
                     const combinedData = [...this.charaMats, ...this.skillMats];
 
-                    // Use reduce() to group objects by 'name' and sum the 'count' property
                     const result = combinedData.reduce((acc, obj) => {
                     const { name, ...rest } = obj;
                     acc[name] = acc[name] ? { ...acc[name], ...rest, quantity: String(Number(acc[name].quantity) + Number(obj.quantity)) } : obj;
                     return acc;
                     }, {});
 
-                    // Convert the result object back to an array of objects
                     this.totalMats = Object.values(result);
-
-                    // Output the result
-                    console.log(this.totalMats);
+                    // console.log(this.totalMats);
                 },
 			},
 	    });
