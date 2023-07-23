@@ -106,14 +106,14 @@
                     <div class="row modal-body editscroll" style="max-height: calc(100vh - 56px); overflow-y: auto;">
                         <div class="row">
                             <div class="col">
-                                <h4 class="modal-title fs-5" id="charaSelectLabel">Role</h4>
+                                <h4 class="modal-title fs-5 ps-2" id="charaSelectLabel">Role</h4>
                             </div>
                             <div class="col pe-0 text-end">
                                 <button type="button" class="btn-close btn-close-white float-right" style="color: silver !important;" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                         </div>
-                        <p class="py-3">
-                            <button v-for="(role, idx) in roles" type="button" class="btn btn-dark btn-sm rounded-pill me-1" :class="{'active': isActive == idx}" @click="isActive = idx">{{role}}</button>
+                        <p class="my-3">
+                            <button style="color: white!important" v-for="(role, idx) in roles" type="button" class="btn btn-sm rounded-pill me-1" :class="{'active': isActive == idx}" @click="isActive = idx">{{role}}</button>
                         </p>
                         <template v-for="(sin, name) in sinners">
                             <div class="col-4 col-md-3 col-lg-2 pe-0 position-relative" v-if="sin.role == roles[isActive]" data-bs-dismiss="modal">
@@ -1015,6 +1015,16 @@
                             image: "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fb86aaee4-0389-474f-a960-5c0d82d09bd0%2Fq.png?table=block&id=2ff0a299-10cf-4f8b-9a78-796be0ad064f&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=92dd5e8a-0fda-4c54-b7ec-76db3970e2f2&cache=v2",
                             notion: "https://www.notion.so/rui5/Lynn-2ff0a29910cf4f8b9a78796be0ad064f",
                         },
+                        "McQueen": {
+                            rank: "A",
+                            role: "Umbra",
+                            p1: ["Phase 1 Umbra Elemental Particle", "Organic Cyst", "Bronze Raw Ore"],
+                            p2: ["Phase 2 Umbra Elemental Fluid", "Infected Cyst", "Bronze Concentrate"],
+                            p3: ["Phase 3 Umbra Elemental Substance", "Mutated Red Cyst", "Bronze Crystal"],
+                            skills: ["Arsenopyrite Raw Ore", "Arsenopyrite Concentrate", "Arsenopyrite Crystal", "Frosted Arsenopyrite Crystal", "DisSea Corpses"],
+                            image: "https://rui5.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Ff67a9f97-3b9b-4d23-8884-cd92809fc0d6%2Fq.png?table=block&id=5100209f-abbd-4b36-9456-03e12b7716b8&spaceId=32af0eb0-18d7-4dbc-a094-2698997abaf8&width=600&userId=&cache=v2",
+                            notion: "https://rui5.notion.site/McQueen-5100209fabbd4b36945603e12b7716b8",
+                        }, 
                     }
 			    };
 			},
