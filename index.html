@@ -1108,8 +1108,12 @@
                     }
                     // console.log(essence, coin)
 
-                    this.charaMats.push({name: "DisCoin", quantity: coin, ...this.materials["DisCoin"]})
-                    this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
+                    if (coin > 0) {
+                        this.charaMats.push({name: "DisCoin", quantity: coin, ...this.materials["DisCoin"]})
+                    }
+                    if (essence > 0) {
+                        this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
+                    }
 
                     this.charaMats.sort(this.compareByGroup);
                     // console.log(this.charaMats)
@@ -1121,7 +1125,13 @@
                     mats = {}
                     coins = 0;
                     relics = 0;
+                    cc = 0;
+
                     for (let i = 0; i < this.selectedSkills.length; i++) {
+                        if (this.selectedSkills[i][0] != 10 && this.selectedSkills[i][1] == 10) {
+                            cc += 1;
+                        }
+
                         lvls = this.skills[this.sinner.rank].slice(this.selectedSkills[i][0]-1, this.selectedSkills[i][1]-1);
                         // console.log(lvls);
 
@@ -1146,6 +1156,9 @@
                     }
                     if (relics > 0) {
                         this.skillMats.push({name: skills[4], quantity: relics, ...this.materials[skills[4]]});
+                    }
+                    if (cc > 0) {
+                        this.skillMats.push({name: "Consciousness Crystal", quantity: cc, ...this.materials["Consciousness Crystal"]});
                     }
 
                     for (rarity in mats) {
