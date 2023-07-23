@@ -29,6 +29,7 @@
         .addscroll {
             max-height: 100%;
             overflow-y: scroll;
+            overflow-x: hidden;
         }
         .editscroll::-webkit-scrollbar-track {
             /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
@@ -60,6 +61,17 @@
             border: 1px solid;
             border-image: linear-gradient(to bottom, gray, rgba(255, 0, 0, 0.808));
             border-image-slice: 1;
+        }
+        .whitebox {
+            outline: 1px solid silver;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .glass {
             background: rgba(255, 255, 255, 0.05);
@@ -98,7 +110,7 @@
             </div>
         </div>
         <div class="row h-100">
-            <div class="col addscroll editscroll">
+            <div class="col editscroll" :class="{'addscroll': isScreenMdOrLarger}">
                 <div class="row align-items-center">
                     <div class="col-4" data-bs-toggle="modal" data-bs-target="#charaSelect">
                         <img :src="sinner.image" style="max-width:100%;"> 
@@ -223,9 +235,12 @@
                 </div>
             </div>
             
-            <div class="col addscroll editscroll">
-                <div class="col mx-0 mt-3 whitered-border">
-                    <h5 class="redblack-box mb-0" data-bs-toggle="collapse" href="#charaMat" role="button" aria-expanded="true" aria-controls="charaMat">Character Level Up material</h5>
+            <div class="col-md col-12 mt-4 mt-md-0 editscroll" :class="{'addscroll': isScreenMdOrLarger}">
+                <div class="row mx-0 mt-3 whitered-border">
+                    <h5 class="redblack-box mb-0 position-relative" data-bs-toggle="collapse" href="#charaMat" role="button" aria-expanded="true" aria-controls="charaMat">
+                        Character Level Up material
+                        <div class="whitebox">▾</div>
+                    </h5>
                     <div class="py-3 collapse multi-collapse show" id="charaMat">
                         <div class="row px-4 py-2" v-for="ch in charaMats">
                             <div class="col-2 align-self-center">
@@ -242,8 +257,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mx-0 mt-4 whitered-border">
-                    <h5 class="redblack-box mb-0" data-bs-toggle="collapse" href="#skillMat" role="button" aria-expanded="true" aria-controls="skillMat">Skill Level Up material</h5>
+                <div class="row mx-0 mt-4 mb-4 mb-md-0 whitered-border">
+                    <h5 class="redblack-box mb-0 position-relative" data-bs-toggle="collapse" href="#skillMat" role="button" aria-expanded="true" aria-controls="skillMat">
+                        Skill Level Up material
+                        <div class="whitebox">▾</div>
+                    </h5>
                     <div class="py-3 collapse multi-collapse show" id="skillMat">
                         <div class="row px-4 py-2" v-for="sk in skillMats">
                             <div class="col-2 align-self-center">
@@ -266,8 +284,13 @@
 
     <script>
         var app = Vue.createApp({
+            created() {
+                this.sinner = {name: "Bai Yi", ...this.sinners["Bai Yi"]};
+                window.addEventListener('resize', this.updateScreenSize);
+            },
 			data() {
 			    return {
+                    isScreenMdOrLarger: window.innerWidth >= 768,
                     sinner: "",
                     // Fury, Arcane, Umbra, Reticle, Endura, Catalyst
                     isActive: 0,
@@ -879,15 +902,10 @@
                     this.getSkillMats();
                 },
             },
-            created() {
-                this.sinner = {name: "Bai Yi", ...this.sinners["Bai Yi"]};
-            },
 			methods: {
-                // displaySinner(sin) {
-                //     console.log(sin)
-                //     this.sinner = sin
-                //     this.sinImg = this.sinner.image;
-                // }
+                updateScreenSize() {
+                    this.isScreenMdOrLarger = window.innerWidth >= 768;
+                },
                 charaLevel(lvl) {
                     this.selectedLevels[0] = lvl;
                     if (this.selectedLevels[0] > this.selectedLevels[1]) {
