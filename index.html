@@ -257,8 +257,8 @@
                         <div class="whitebox">▾</div>
                     </h5>
                     <div class="py-3 collapse multi-collapse show" id="charaMat">
-                        <div class="row px-4 py-2" v-for="ch in charaMats">
-                            <div class="col-2 align-self-center">
+                        <div class="row px-2 py-2" v-for="ch in charaMats">
+                            <div class="col-lg-2 col-md-3 col-sm-2 col-3 align-self-center">
                                 <a :href="ch.notion" target="_blank">
                                     <img :src="ch.image" style="max-width:100%;">
                                 </a>
@@ -266,7 +266,7 @@
                             <div class="col align-self-center">
                                 {{ch.name}}
                             </div>
-                            <div class="col-2 align-self-center text-end">
+                            <div class="col-auto align-self-center text-end">
                                 {{ch.quantity}}
                             </div>
                         </div>
@@ -278,8 +278,8 @@
                         <div class="whitebox">▾</div>
                     </h5>
                     <div class="py-3 collapse multi-collapse show" id="skillMat">
-                        <div class="row px-4 py-2" v-for="sk in skillMats">
-                            <div class="col-2 align-self-center">
+                        <div class="row px-2 py-2" v-for="sk in skillMats">
+                            <div class="col-lg-2 col-md-3 col-sm-2 col-3 align-self-center">
                                 <a :href="sk.notion" target="_blank">
                                     <img :src="sk.image" style="max-width:100%;">
                                 </a>
@@ -287,7 +287,7 @@
                             <div class="col align-self-center">
                                 {{sk.name}}
                             </div>
-                            <div class="col-2 align-self-center text-end">
+                            <div class="col-auto align-self-center text-end">
                                 {{sk.quantity}}
                             </div>
                         </div>
@@ -299,8 +299,8 @@
                         <div class="whitebox">▾</div>
                     </h5>
                     <div class="py-3 collapse multi-collapse show" id="totalMat">
-                        <div class="row px-4 py-2" v-for="tm in totalMats">
-                            <div class="col-2 align-self-center">
+                        <div class="row px-2 py-2" v-for="tm in totalMats">
+                            <div class="col-lg-2 col-md-3 col-sm-2 col-3 align-self-center">
                                 <a :href="tm.notion" target="_blank">
                                     <img :src="tm.image" style="max-width:100%;">
                                 </a>
@@ -308,7 +308,7 @@
                             <div class="col align-self-center">
                                 {{tm.name}}
                             </div>
-                            <div class="col-2 align-self-center text-end">
+                            <div class="col-auto align-self-center text-end">
                                 {{tm.quantity}}
                             </div>
                         </div>
