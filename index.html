@@ -36,7 +36,7 @@
             overflow-y: hidden;
             overflow-x: hidden;
         }
-        .editscroll::-webkit-scrollbar-track {
+        ::-webkit-scrollbar-track {
             /* -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
             border-radius: 10px; */
             background-color: #212529;
@@ -45,12 +45,12 @@
             border-right-width: 1px;
         }
 
-        .editscroll::-webkit-scrollbar {
+        ::-webkit-scrollbar {
             width: 12px;
             background-color: #F5F5F5;
         }
 
-        .editscroll::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
             border-radius: 10px;
             background-color: #D62929;
             background-image: -webkit-linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4) 50%, transparent, transparent)
@@ -103,18 +103,20 @@
         <div class="modal fade" id="charaSelect" tabindex="-1" aria-labelledby="charaSelectLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content bg-dark">
-                    <div class="row modal-body editscroll" style="max-height: calc(100vh - 56px); overflow-y: auto;">
-                        <div class="row">
-                            <div class="col">
-                                <h4 class="modal-title fs-5 ps-2" id="charaSelectLabel">Role</h4>
+                    <div class="row modal-body pt-0" style="max-height: calc(100vh - 60px); overflow-y: auto;">
+                        <div style="padding: 16px; position: sticky; top: 0; z-index: 10; background-color: #212529;">
+                            <div class="row">
+                                <div class="col">
+                                    <h4 class="modal-title fs-5" id="charaSelectLabel">Role</h4>
+                                </div>
+                                <div class="col pe-0 text-end">
+                                    <button type="button" class="btn-close btn-close-white float-right" style="color: silver !important;" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
                             </div>
-                            <div class="col pe-0 text-end">
-                                <button type="button" class="btn-close btn-close-white float-right" style="color: silver !important;" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+                            <p class="my-3 mb-0">
+                                <button style="color: white!important" v-for="(role, idx) in roles" type="button" class="btn btn-sm rounded-pill me-1" :class="{'active': isActive == idx}" @click="isActive = idx">{{role}}</button>
+                            </p>
                         </div>
-                        <p class="my-3">
-                            <button style="color: white!important" v-for="(role, idx) in roles" type="button" class="btn btn-sm rounded-pill me-1" :class="{'active': isActive == idx}" @click="isActive = idx">{{role}}</button>
-                        </p>
                         <template v-for="(sin, name) in sinners">
                             <div class="col-4 col-md-3 col-lg-2 pe-0 position-relative" v-if="sin.role == roles[isActive]" data-bs-dismiss="modal">
                                 <img :src="sin.image" class="shadow-image" style="max-width:100%" @click="sinner = {'name': name, ...sin}">
@@ -250,7 +252,7 @@
                 </div>
             </div>
             
-            <div class="col-md col-12 mt-4 mt-md-0 editscroll" :class="{'addscroll': isScreenMdOrLarger}">
+            <div class="col-md col-12 mt-4 mt-md-0" :class="{'addscroll': isScreenMdOrLarger}">
                 <div class="row mx-0 mt-0 mt-md-3 whitered-border">
                     <h5 class="redblack-box mb-0 position-relative" data-bs-toggle="collapse" href="#charaMat" role="button" aria-expanded="true" aria-controls="charaMat">
                         Character Level Up Materials
