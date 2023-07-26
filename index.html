@@ -1614,12 +1614,23 @@
                 updateScreenSize() {
                     this.isScreenMdOrLarger = window.innerWidth >= 768;
                 },
-                compareByGroup(a, b) {
-                    if (a.group === "Currency" && b.group !== "Currency") return -1;
-                    if (a.group !== "Currency" && b.group === "Currency") return 1;
-                    if (a.group < b.group) return -1;
-                    if (a.group > b.group) return 1;
-                    return 0;
+                grouping(mats) {
+                    var order = ["Currency", "Phase", "Module"]
+                    var groupedMats = [];
+
+                    for (mat of mats) {
+                        if (!order.includes(mat.group) && mat.group != "Slate") {
+                            order.push(mat.group)
+                        }                        
+                    }
+                    order.push("Slate")
+
+                    for (grp of order) {
+                        var matsInGroup = mats.filter((item) => item.group === grp);
+                        groupedMats.push(...matsInGroup);
+                    }
+                    
+                    return groupedMats;
                 },
                 charaLevel(lvl) {
                     this.selectedLevels[0] = lvl;
@@ -1711,7 +1722,7 @@
                         this.charaMats.push({name: "Mania Essence", quantity: essence, ...this.materials["Mania Essence"]})
                     }
 
-                    this.charaMats.sort(this.compareByGroup);
+                    this.charaMats = this.grouping(this.charaMats);
                     // console.log(this.charaMats)
                     this.getTotalMats();
                 },
@@ -1763,7 +1774,7 @@
                         this.skillMats.push({name: skills[rarity], quantity: mats[rarity][1], ...this.materials[skills[rarity]]});
                     }
 
-                    this.skillMats.sort(this.compareByGroup);
+                    this.skillMats = this.grouping(this.skillMats);
                     // console.log(this.skillMats);
                     this.getTotalMats();
                 },
@@ -1776,7 +1787,7 @@
                     return acc;
                     }, {});
 
-                    this.totalMats = Object.values(result).sort(this.compareByGroup);
+                    this.totalMats = this.grouping(Object.values(result));
                     // console.log(this.totalMats);
                 },
 			},
