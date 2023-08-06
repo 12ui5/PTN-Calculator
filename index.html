@@ -1677,7 +1677,8 @@
                 },
                 charaLevel(lvl) {
                     this.selectedLevels[0] = lvl;
-                    if (this.selectedLevels[0] > this.selectedLevels[1]) {
+                    
+                    if (isNaN(this.selectedLevels[0]) ? Number(this.selectedLevels[0].substring(0, 2))+0.5 : this.selectedLevels[0] > (isNaN(this.selectedLevels[1]) ? Number(this.selectedLevels[1].substring(0, 2))+0.5 : this.selectedLevels[1])) {
                         this.selectedLevels[1] = this.selectedLevels[0];
                     }
                     // console.log("change")
